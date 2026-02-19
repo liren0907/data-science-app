@@ -1,0 +1,67 @@
+{
+  "nodes": [
+    {
+      "id": "person_in_scene",
+      "required": true,
+      "node_name": "person_in_scene",
+      "role": "start_condition"
+    },
+    {
+      "id": "person_safety_helmet_in_position",
+      "required": true,
+      "node_name": "person_safety_helmet_in_position"
+    },
+    {
+      "id": "person_reflective_vest_in_position",
+      "required": true,
+      "node_name": "person_reflective_vest_in_position"
+    },
+    {
+      "id": "person_hands_over_head",
+      "required": true,
+      "node_name": "person_hands_over_head"
+    },
+    {
+      "id": "person_hands_down_after_raise",
+      "required": true,
+      "node_name": "person_hands_down_after_raise"
+    },
+    {
+      "id": "person_action_completed",
+      "required": false,
+      "node_name": "person_action_completed",
+      "role": "end_condition"
+    }
+  ],
+  "edges": [
+    {
+      "source": "person_in_scene",
+      "target": "person_safety_helmet_in_position"
+    },
+    {
+      "source": "person_in_scene",
+      "target": "person_reflective_vest_in_position"
+    },
+    {
+      "source": "person_in_scene",
+      "target": "person_hand_up"
+    },
+    {
+      "source": "person_safety_helmet_in_position",
+      "target": "person_hand_up"
+    },
+    {
+      "source": "person_reflective_vest_in_position",
+      "target": "person_hand_up"
+    },
+    {
+      "source": "person_hand_up",
+      "target": "person_hands_down_after_raise"
+    },
+    {
+      "source": "person_hands_down_after_raise",
+      "target": "person_action_completed"
+    }
+  ]
+}
+

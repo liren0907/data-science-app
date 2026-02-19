@@ -1,0 +1,111 @@
+{
+    "inference_mode": "hierarchical",
+    "hierarchical_config": {
+        "primary_model": {
+            "id": "primary_detector",
+            "name": "Primary Object Detector",
+            "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+            "confidence_threshold": 0.6,
+            "nms_threshold": 0.5,
+            "model_input_size": {
+                "width": 640,
+                "height": 640
+            },
+            "color": {
+                "r": 0,
+                "g": 255,
+                "b": 0
+            },
+            "target_classes": ["person", "car", "bicycle", "motorcycle", "bus", "truck"],
+            "enabled": true
+        },
+        "secondary_models": [
+            {
+                "id": "secondary_classifier_1",
+                "name": "Secondary Region Classifier #1",
+                "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+                "confidence_threshold": 0.7,
+                "nms_threshold": 0.4,
+                "model_input_size": {
+                    "width": 224,
+                    "height": 224
+                },
+                "color": {
+                    "r": 255,
+                    "g": 0,
+                    "b": 0
+                },
+                "enabled": true,
+                "priority": 1,
+                "specialization": ["person", "bicycle"]
+            },
+            {
+                "id": "secondary_classifier_2",
+                "name": "Secondary Region Classifier #2",
+                "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+                "confidence_threshold": 0.75,
+                "nms_threshold": 0.4,
+                "model_input_size": {
+                    "width": 224,
+                    "height": 224
+                },
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 255
+                },
+                "enabled": true,
+                "priority": 1,
+                "specialization": ["car", "motorcycle", "bus", "truck"]
+            },
+            {
+                "id": "secondary_classifier_3",
+                "name": "General Secondary Classifier",
+                "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+                "confidence_threshold": 0.65,
+                "nms_threshold": 0.4,
+                "model_input_size": {
+                    "width": 224,
+                    "height": 224
+                },
+                "color": {
+                    "r": 255,
+                    "g": 255,
+                    "b": 0
+                },
+                "enabled": true,
+                "priority": 2,
+                "specialization": []
+            }
+        ],
+        "load_balancing": {
+            "strategy": "specialization_first",
+            "enable_specialization": true,
+            "max_queue_size": 16,
+            "timeout_ms": 1000
+        },
+        "cropping_config": {
+            "padding_ratio": 0.15,
+            "min_crop_size": 64,
+            "max_crop_size": 512,
+            "resize_method": "letterbox",
+            "quality_threshold": 0.8
+        },
+        "result_combination": "hierarchical_overlay",
+        "visualization": {
+            "show_primary_boxes": true,
+            "show_secondary_results": true,
+            "show_crop_regions": false,
+            "label_format": "{primary_class}: {secondary_class} ({confidence:.2f})"
+        }
+    },
+    "input_path": "data/test1.mp4",
+    "output_path": "output/hierarchical_output.mp4",
+    "performance": {
+        "max_concurrent_crops": 16,
+        "batch_secondary_inference": true,
+        "secondary_model_pool_size": 3,
+        "enable_parallel_processing": true,
+        "max_concurrent_secondary_models": 3
+    }
+} 

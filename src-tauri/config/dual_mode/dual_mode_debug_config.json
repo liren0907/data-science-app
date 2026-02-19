@@ -1,0 +1,100 @@
+{
+    "models": [
+        {
+            "id": "primary_yolo_detector",
+            "name": "Primary YOLO Object Detector (DEBUG)",
+            "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+            "device": "CPU",
+            "replicas": 1,
+            "enabled": true,
+            "priority": 1,
+            "input_source": {
+                "type": "full_frame"
+            },
+            "model_config": {
+                "confidence_threshold": 0.5,
+                "nms_threshold": 0.5,
+                "input_size": {
+                    "width": 640,
+                    "height": 640
+                },
+                "color": { "r": 0, "g": 255, "b": 0 }
+            },
+            "output_config": {
+                "target_classes": ["person"],
+                "draw_boxes": true,
+                "draw_labels": true,
+                "draw_confidence": true,
+                "label_format": "Primary: {class_name} ({confidence:.2f})"
+            },
+            "retry_config": {
+                "enabled": true,
+                "max_retries": 3,
+                "initial_delay_ms": 100,
+                "backoff_factor": 2.0
+            }
+        },
+        {
+            "id": "secondary_person_equipment_segmenter",
+            "name": "Secondary Person Equipment Segmenter (DEBUG)",
+            "model_path": "model_weight/openvino/person_equipment_yolo11s-seg_openvino_model/person_equipment_yolo11s-seg.xml",
+            "device": "CPU", 
+            "replicas": 1,
+            "enabled": true,
+            "priority": 2,
+            "input_source": {
+                "type": "model_detections",
+                "source_model_id": "primary_yolo_detector",
+                "crop_config": {
+                    "padding_ratio": 0.10,
+                    "min_size": 64,
+                    "max_size": 320,
+                    "resize_method": "letterbox",
+                    "quality_threshold": 0.3
+                },
+                "class_filter": ["person"]
+            },
+            "model_config": {
+                "confidence_threshold": 0.4,
+                "nms_threshold": 0.4,
+                "input_size": {
+                    "width": 224,
+                    "height": 224
+                },
+                "color": { "r": 255, "g": 0, "b": 0 }
+            },
+            "output_config": {
+                "target_classes": [
+                    "safety_helmet", "reflective_vest", "protective_clothing", "gloves", "safety_boots"
+                ],
+                "draw_boxes": true,
+                "draw_labels": true,
+                "draw_confidence": true,
+                "label_format": "Equipment: {class_name} ({confidence:.2f})"
+            },
+            "retry_config": {
+                "enabled": true,
+                "max_retries": 2,
+                "initial_delay_ms": 50,
+                "backoff_factor": 1.5
+            }
+        }
+    ],
+    "processing_config": {
+        "max_parallel_models_per_stage": 2,
+        "enable_pipeline_optimization": true,
+        "memory_pool_size": "1GB",
+        "enable_result_caching": false,
+        "max_cache_size": 100,
+        "timeout_ms": 30000
+    },
+    "input_path": "data/test_short.mp4",
+    "output_path": "output/dual_mode_debug_output.mp4", 
+    "visualization_config": {
+        "show_pipeline_info": true,
+        "show_performance_stats": true,
+        "color_scheme": "high_contrast",
+        "font_scale": 0.7,
+        "line_thickness": 2
+    }
+} 

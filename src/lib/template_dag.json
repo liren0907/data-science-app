@@ -1,0 +1,181 @@
+{
+    "dag_name": "AED使用流程",
+    "description": "模擬AED（自動體外電擊器）完整使用流程的有向無環圖，包含一次電擊及胸部按壓",
+    "version": "1.0",
+    "nodes": [
+        {
+            "id": "node_01",
+            "name": "確認環境安全",
+            "description": "確認現場環境安全，排除危險因素",
+            "action_type": "assessment"
+        },
+        {
+            "id": "node_02",
+            "name": "確認患者意識",
+            "description": "輕拍患者肩膀並大聲呼喚，確認是否有反應",
+            "action_type": "assessment"
+        },
+        {
+            "id": "node_03",
+            "name": "呼叫緊急救援",
+            "description": "撥打119或請旁人協助呼叫緊急救援",
+            "action_type": "communication"
+        },
+        {
+            "id": "node_04",
+            "name": "取得AED",
+            "description": "取得附近的AED設備",
+            "action_type": "preparation"
+        },
+        {
+            "id": "node_05",
+            "name": "開啟AED電源",
+            "description": "打開AED電源，聽取語音指示",
+            "action_type": "operation",
+            "attachments": [
+                {
+                    "type": "audio",
+                    "source": "assets/aed_voice_prompts.mp3",
+                    "metadata": {
+                        "start_time": 0.0,
+                        "end_time": 5.0,
+                        "description": "AED 開機語音提示"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "node_06",
+            "name": "貼上電極貼片",
+            "description": "露出患者胸部，依指示將電極貼片貼在正確位置（右鎖骨下方及左腋下）",
+            "action_type": "operation",
+            "attachments": [
+                {
+                    "type": "image",
+                    "source": "assets/electrode_placement.png",
+                    "metadata": {
+                        "description": "電極貼片正確黏貼位置示意圖"
+                    }
+                },
+                {
+                    "type": "video",
+                    "source": "assets/aed_process_demo.mp4",
+                    "metadata": {
+                        "start_time": 30.0,
+                        "end_time": 55.0,
+                        "description": "真人示範電極貼片黏貼"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "node_07",
+            "name": "分析心律",
+            "description": "AED自動分析患者心律，確保無人接觸患者",
+            "action_type": "analysis"
+        },
+        {
+            "id": "node_08",
+            "name": "確認需要電擊",
+            "description": "AED判斷是否建議電擊",
+            "action_type": "decision"
+        },
+        {
+            "id": "node_09",
+            "name": "清場確認",
+            "description": "大聲宣布「大家離開」，確認無人接觸患者",
+            "action_type": "safety"
+        },
+        {
+            "id": "node_10",
+            "name": "按下電擊按鈕",
+            "description": "按下AED電擊按鈕進行電擊",
+            "action_type": "operation"
+        },
+        {
+            "id": "node_11",
+            "name": "進行胸部按壓",
+            "description": "電擊後立即進行胸部按壓，按壓深度5-6公分，速率每分鐘100-120次",
+            "action_type": "cpr",
+            "attachments": [
+                {
+                    "type": "video",
+                    "source": "assets/cpr_technique.mp4",
+                    "metadata": {
+                        "start_time": 10.0,
+                        "end_time": 40.0,
+                        "description": "CPR 正確按壓姿勢示範"
+                    }
+                },
+                {
+                    "type": "text",
+                    "content": "用力壓、快快壓、胸回彈、莫中斷",
+                    "metadata": {
+                        "description": "CPR 口訣"
+                    }
+                },
+                {
+                    "type": "pdf",
+                    "source": "docs/aha_guidelines_2020.pdf",
+                    "metadata": {
+                        "page_start": 15,
+                        "page_end": 16,
+                        "description": "AHA 2020 CPR 指南重點摘要"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "node_12",
+            "name": "完成一個循環",
+            "description": "完成30次按壓加2次人工呼吸（或持續按壓）為一個循環",
+            "action_type": "cpr"
+        }
+    ],
+    "edges": [
+        {
+            "from": "node_01",
+            "to": "node_02"
+        },
+        {
+            "from": "node_02",
+            "to": "node_03"
+        },
+        {
+            "from": "node_03",
+            "to": "node_04"
+        },
+        {
+            "from": "node_04",
+            "to": "node_05"
+        },
+        {
+            "from": "node_05",
+            "to": "node_06"
+        },
+        {
+            "from": "node_06",
+            "to": "node_07"
+        },
+        {
+            "from": "node_07",
+            "to": "node_08"
+        },
+        {
+            "from": "node_08",
+            "to": "node_09"
+        },
+        {
+            "from": "node_09",
+            "to": "node_10"
+        },
+        {
+            "from": "node_10",
+            "to": "node_11"
+        },
+        {
+            "from": "node_11",
+            "to": "node_12"
+        }
+    ]
+}

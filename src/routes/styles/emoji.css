@@ -1,0 +1,59 @@
+/* Emoji system styles for home page */
+
+/* Noto Emoji font setup for consistent cross-platform rendering */
+.emoji {
+  font-family: 'Noto Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+  font-variant-emoji: emoji;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Emoji size classes */
+.emoji-xs { font-size: 0.875rem; }
+.emoji-sm { font-size: 1rem; }
+.emoji-md { font-size: 1.25rem; }
+.emoji-lg { font-size: 1.5rem; }
+.emoji-xl { font-size: 2rem; }
+.emoji-2xl { font-size: 3rem; }
+.emoji-3xl { font-size: 4rem; }
+
+/* Clean minimal emoji display */
+.emoji-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Category filter emoji styling */
+.category-emoji {
+  font-size: 1.125rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Animation for emoji interactions */
+@keyframes emoji-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-4px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+.emoji-bounce {
+  animation: emoji-bounce 0.6s ease-in-out;
+}
+
+/* Ensure emoji text doesn't get antialiased poorly */
+.emoji {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}

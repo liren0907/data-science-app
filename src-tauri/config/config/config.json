@@ -1,0 +1,11 @@
+{
+    "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+    "input_path": "data/test1.mp4",
+    "output_path": "output/output.mp4",
+    "confidence_threshold": 0.5,
+    "nms_threshold": 0.5,
+    "model_input_size": {
+        "width": 640,
+        "height": 640
+    }
+}

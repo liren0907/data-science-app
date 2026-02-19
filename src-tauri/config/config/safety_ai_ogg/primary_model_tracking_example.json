@@ -1,0 +1,140 @@
+{
+  "models": [
+    {
+      "id": "yolo_detection",
+      "name": "YOLOv8 Detection",
+      "model_path": "models/yolov8n.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "full_frame"
+      },
+      "model_config": {
+        "confidence_threshold": 0.5,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 640,
+          "height": 640
+        },
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        },
+        "auto_color_by_class": true
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class_name} {confidence:.2f}"
+      },
+      "enabled": true,
+      "priority": 1,
+      "replicas": 1
+    },
+    {
+      "id": "pose_estimation",
+      "name": "YOLOv8 Pose",
+      "model_path": "models/yolov8n-pose.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "full_frame"
+      },
+      "model_config": {
+        "confidence_threshold": 0.5,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 640,
+          "height": 640
+        },
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        },
+        "auto_color_by_class": false
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "draw_keypoints": true,
+        "keypoint_radius": 3,
+        "keypoint_confidence_threshold": 0.3,
+        "draw_skeleton": true,
+        "skeleton_thickness": 2,
+        "skeleton_confidence_threshold": 0.3,
+        "label_format": "Person {confidence:.2f}"
+      },
+      "enabled": true,
+      "priority": 2,
+      "replicas": 1
+    },
+    {
+      "id": "person_classifier",
+      "name": "Person Classifier",
+      "model_path": "models/person_classifier.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "yolo_detection",
+        "crop_config": {
+          "padding_ratio": 0.1,
+          "min_size": 64,
+          "max_size": 512,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.5
+        },
+        "class_filter": ["person"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.7,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 224,
+          "height": 224
+        },
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        },
+        "auto_color_by_class": false
+      },
+      "output_config": {
+        "draw_boxes": false,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class_name} {confidence:.2f}"
+      },
+      "enabled": true,
+      "priority": 3,
+      "replicas": 1
+    }
+  ],
+  "processing_config": {
+    "max_parallel_models_per_stage": 2,
+    "enable_pipeline_optimization": true,
+    "memory_pool_size": "1GB",
+    "enable_result_caching": false,
+    "max_cache_size": 100,
+    "timeout_ms": 5000
+  },
+  "input_path": "input/video.mp4",
+  "output_path": "output/result.mp4",
+  "visualization_config": {
+    "show_pipeline_info": true,
+    "show_performance_stats": true,
+    "color_scheme": "default",
+    "font_scale": 0.6,
+    "line_thickness": 2,
+    "enable_imshow": false
+  },
+  "tracking": {
+    "enabled": true,
+    "tracker_type": "sort",
+    "max_age": 30,
+    "min_hits": 3,
+    "iou_threshold": 0.3
+  }
+} 

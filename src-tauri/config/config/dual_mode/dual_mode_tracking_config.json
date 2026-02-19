@@ -1,0 +1,173 @@
+{
+  "models": [
+    {
+      "id": "person_detector",
+      "name": "Person Detection Model",
+      "model_path": "models/yolov8n.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "full_frame"
+      },
+      "model_config": {
+        "confidence_threshold": 0.5,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 640,
+          "height": 640
+        },
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        },
+        "auto_color_by_class": true,
+        "class_filter": ["person"]
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class} {confidence:.2f}",
+        "draw_keypoints": false,
+        "draw_skeleton": false,
+        "draw_segmentation_polygons": false
+      },
+      "enabled": true,
+      "priority": 1,
+      "replicas": 1
+    },
+    {
+      "id": "helmet_detector",
+      "name": "Helmet Detection Model",
+      "model_path": "models/helmet_detector.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "person_detector",
+        "crop_config": {
+          "padding_ratio": 0.2,
+          "min_size": 64,
+          "max_size": 512,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.3
+        },
+        "class_filter": ["person"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.4,
+        "nms_threshold": 0.3,
+        "input_size": {
+          "width": 320,
+          "height": 320
+        },
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        },
+        "auto_color_by_class": true,
+        "class_filter": ["helmet", "no_helmet"]
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class} {confidence:.2f}",
+        "draw_keypoints": false,
+        "draw_skeleton": false,
+        "draw_segmentation_polygons": false
+      },
+      "enabled": true,
+      "priority": 2,
+      "replicas": 1
+    },
+    {
+      "id": "vest_detector",
+      "name": "Safety Vest Detection Model",
+      "model_path": "models/vest_detector.pt",
+      "device": "CPU",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "person_detector",
+        "crop_config": {
+          "padding_ratio": 0.3,
+          "min_size": 64,
+          "max_size": 512,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.3
+        },
+        "class_filter": ["person"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.4,
+        "nms_threshold": 0.3,
+        "input_size": {
+          "width": 320,
+          "height": 320
+        },
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        },
+        "auto_color_by_class": true,
+        "class_filter": ["safety_vest", "no_vest"]
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class} {confidence:.2f}",
+        "draw_keypoints": false,
+        "draw_skeleton": false,
+        "draw_segmentation_polygons": false
+      },
+      "enabled": true,
+      "priority": 2,
+      "replicas": 1
+    }
+  ],
+  "processing_config": {
+    "max_parallel_models_per_stage": 4,
+    "enable_pipeline_optimization": true,
+    "memory_pool_size": "1GB",
+    "enable_result_caching": true,
+    "max_cache_size": 1000,
+    "timeout_ms": 5000
+  },
+  "input_path": "input/safety_video.mp4",
+  "output_path": "output/safety_processed.mp4",
+  "visualization_config": {
+    "show_pipeline_info": true,
+    "show_performance_stats": true,
+    "color_scheme": "default",
+    "font_scale": 0.6,
+    "line_thickness": 2,
+    "enable_imshow": false,
+    "save_individual_frames": false
+  },
+  "tracking": {
+    "enabled": true,
+    "tracker_type": "sort",
+    "max_age": 30,
+    "min_hits": 3,
+    "iou_threshold": 0.3,
+    "dual_mode": {
+      "primary_tracking": {
+        "enabled": true,
+        "max_age": 30,
+        "min_hits": 3,
+        "iou_threshold": 0.3
+      },
+      "secondary_tracking": {
+        "enabled": true,
+        "max_age": 15,
+        "min_hits": 2,
+        "iou_threshold": 0.4,
+        "track_within_crops": true,
+        "link_to_primary_tracks": true
+      },
+      "enable_hierarchical_tracking": true
+    }
+  }
+} 

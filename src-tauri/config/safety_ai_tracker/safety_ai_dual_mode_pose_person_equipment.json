@@ -1,0 +1,128 @@
+{
+    "models": [
+        {
+            "id": "yolov8_pose_detector",
+            "name": "YOLOv8 Pose Estimation",
+            "model_path": "../model_weight/openvino/yolov8n-pose_openvino_model/yolov8n-pose.xml",
+            "device": "CPU",
+            "replicas": 1,
+            "enabled": true,
+            "priority": 1,
+            "input_source": {
+                "type": "full_frame"
+            },
+            "model_config": {
+                "confidence_threshold": 0.3,
+                "nms_threshold": 0.45,
+                "input_size": {
+                    "width": 640,
+                    "height": 640
+                },
+                "color": { "r": 255, "g": 0, "b": 0 },
+                "auto_color_by_class": true
+            },
+            "output_config": {
+                "draw_boxes": true,
+                "draw_labels": true,
+                "draw_confidence": true,
+                "label_format": "{class_name} ({confidence}%) [POSE] [ID:{track_id}]",
+                "draw_keypoints": true,
+                "keypoint_radius": 3,
+                "keypoint_confidence_threshold": 0.3,
+                "keypoint_color": { "r": 0, "g": 255, "b": 255 },
+                "draw_skeleton": true,
+                "skeleton_thickness": 2,
+                "skeleton_color": { "r": 255, "g": 255, "b": 0 },
+                "skeleton_confidence_threshold": 0.3,
+                "target_classes": [
+                    "person"
+                ],
+                "class_color_overrides": {
+                    "person": { "r": 255, "g": 0, "b": 0 }
+                }
+            },
+            "retry_config": {
+                "enabled": false,
+                "max_retries": 3,
+                "initial_delay_ms": 100,
+                "backoff_factor": 2.0
+            },
+            "tracking": {
+                "enabled": true,
+                "tracker_type": "sort",
+                "max_age": 30,
+                "min_hits": 3,
+                "iou_threshold": 0.3
+            }
+        },
+        {
+            "id": "secondary_person_equipment_segmenter",
+            "name": "Secondary Person Equipment Segmenter",
+            "model_path": "../model_weight/openvino/person_equipment_yolo11s-seg_openvino_model/person_equipment_yolo11s-seg.xml",
+            "device": "CPU", 
+            "replicas": 1,
+            "enabled": true,
+            "priority": 2,
+            "input_source": {
+                "type": "model_detections",
+                "source_model_id": "yolov8_pose_detector",
+                "crop_config": {
+                    "padding_ratio": 0.15,
+                    "min_size": 96,
+                    "max_size": 512,
+                    "resize_method": "letterbox",
+                    "quality_threshold": 0.2
+                },
+                "class_filter": ["person"]
+            },
+            "model_config": {
+                "confidence_threshold": 0.3,
+                "nms_threshold": 0.4,
+                "input_size": {
+                    "width": 640,
+                    "height": 640
+                },
+                "color": { "r": 255, "g": 0, "b": 156 },
+                "auto_color_by_class": true,
+                "class_filter": ["safety_helmet", "reflective_vest"]
+            },
+            "output_config": {
+                "target_classes": [],
+                "draw_boxes": true,
+                "draw_labels": true,
+                "draw_confidence": true,
+                "label_format": "Equipment: {class_name} ({confidence}%)",
+                "class_color_overrides": {
+                    "safety_helmet": { "r": 255, "g": 255, "b": 0 },
+                    "reflective_vest": { "r": 0, "g": 255, "b": 0 }
+                },
+                "segmentation_polygon_color": { "r": 0, "g": 255, "b": 255 }
+            },
+            "retry_config": {
+                "enabled": true,
+                "max_retries": 2,
+                "initial_delay_ms": 50,
+                "backoff_factor": 1.5
+            },
+            "tracking": null
+        }
+    ],
+    "processing_config": {
+        "max_parallel_models_per_stage": 4,
+        "enable_pipeline_optimization": true,
+        "memory_pool_size": "2GB",
+        "enable_result_caching": false,
+        "max_cache_size": 500,
+        "timeout_ms": 45000
+    },
+    "input_path": "../data/jones_single.mp4",
+    "output_path": "../output/safety_ai_dual_mode_pose_person_equipment_jones_single.mp4", 
+    "visualization_config": {
+        "show_pipeline_info": true,
+        "show_performance_stats": true,
+        "color_scheme": "default",
+        "font_scale": 0.6,
+        "line_thickness": 2
+    },
+    "tracking": null
+} 

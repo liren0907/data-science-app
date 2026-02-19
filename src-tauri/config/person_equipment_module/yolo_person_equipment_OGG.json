@@ -1,0 +1,35 @@
+{
+    "execution_mode": "parallel",
+    "model_network": {
+        "person_equipment": {
+            "inference_mode": "double_series",
+            "update_mode": false,
+            "inference_frame_frequency": 1,
+            "inference_time_frequency": 0,
+            "model_instances": [
+                {
+                    "model_name": "person",
+                    "model_path": "./model_weight/yolo11s-pose.pt",
+                    "confidence_threshold": 0.5,
+                    "device": "cpu",
+                    "image_size": 640,
+                    "half_precision": false,
+                    "track": true,
+                    "instance_type": "parent"
+                },
+                {
+                    "model_name": "person_equipment",
+                    "model_path": "./model_weight/person_equipment_yolo11s-seg.pt",
+                    "confidence_threshold": 0.5,
+                    "device": "cpu",
+                    "image_size": 640,
+                    "half_precision": false,
+                    "instance_type": "children",
+                    "parent_label": ["person"],
+                    "parent_label_scaling": 1.0
+                }
+            ]
+        }
+    }
+}
+

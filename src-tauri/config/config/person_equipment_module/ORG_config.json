@@ -1,0 +1,378 @@
+{
+    "safety_ai_config": {
+        "object_identifier": {
+            "object_occurence": ["person", "safety_helmet", "reflective_vest"]
+        },
+        "size_identifier": {
+            "person": {
+                "bbox_width": 50,
+                "bbox_height": 150,
+                "filter_dimension": "both"
+            },
+            "thresholds": {
+                "overlap": 0.3,
+                "near": 50,
+                "holding": 0.5,
+                "attached": 0.7,
+                "height_ratio": 1.2
+            }
+        },
+        "dispatcher": {
+            "scene_guard": {
+                "road": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["road", "traffic_cone", "connecting_rod", "notification_billboard", "barricades"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.2, 1.2]
+                    }
+                },
+                "ladder": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["ladder", "extension_ladder", "step_ladder"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [2.0, 2.0]
+                    }
+                },
+                "liftcar": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["liftcar", "working_platform"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.5, 1.5]
+                    }
+                },
+                "sparkling": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["spark", "weld"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.5, 1.5]
+                    }
+                },
+                "liftcar_scissor": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["liftcar_scissor", "platform"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.5, 1.5]
+                    }
+                },
+                "crane": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["crane"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.5, 1.5]
+                    }
+                },
+                "excavator": {
+                    "relation_type": "all",
+                    "object_identifier": {
+                        "object_occurence": ["excavator"]
+                    },
+                    "region_identifier": {
+                        "region_type": "bbox",
+                        "expand_ratio": [1.5, 1.5]
+                    }
+                }
+            },
+            "keypoint_guard": {
+                "parameters": {
+                    "confidence_threshold": 0.5,
+                    "iou_threshold": 0.5
+                },
+                "person_equipment_children_relations": {
+                    "equipment_names": ["safety_helmet", "reflective_vest", "body_harness"]
+                }
+            },
+            "person_equipment_bbox_guard": {
+                "safety_helmet": {
+                    "model_branch": "person_equipment",
+                    "specific_label": "safety_helmet",
+                    "required": true
+                },
+                "reflective_vest": {
+                    "model_branch": "person_equipment",
+                    "specific_label": "reflective_vest",
+                    "required": true
+                },
+                "body_harness": {
+                    "model_branch": "person_equipment",
+                    "specific_label": "body_harness",
+                    "required": true
+                }
+            },
+            "use_universal_position_guard": true,
+            "position_guard": {
+                "person_road_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "side_model_branch": "scene",
+                    "side_model_name": "scene",
+                    "side_specific_label": "road",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    },
+                    "role_identifier": "road"
+                },
+                "person_extension_ladder_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "role_identifier": "ladder",
+                    "side_model_branch": "background",
+                    "side_model_name": "background",
+                    "side_specific_label": "extension_ladder",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    }
+                },
+                "person_step_ladder_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "side_model_branch": "background",
+                    "side_model_name": "background",
+                    "side_specific_label": "step_ladder",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    },
+                    "role_identifier": "ladder"
+                },
+                "person_working_platform_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "side_model_branch": "background",
+                    "side_model_name": "background",
+                    "side_specific_label": "working_platform",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    },
+                    "role_identifier": "liftcar"
+                },
+                "person_liftcar_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "side_model_branch": "background",
+                    "side_model_name": "background",
+                    "side_specific_label": "liftcar",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    },
+                    "role_identifier": "liftcar"
+                },
+                "person_liftcar_scissor_role": {
+                    "relation_type": "side",
+                    "self_model_branch": "person_equipment",
+                    "self_model_name": "person",
+                    "self_specific_label": "person",
+                    "side_model_branch": "background",
+                    "side_model_name": "background",
+                    "side_specific_label": "liftcar_scissor",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    },
+                    "role_identifier": "liftcar_scissor"
+                },
+                "person_step_ladder_holding_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "step_ladder",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "reverse_keypoints",
+                        "keypoint": [9, 10]
+                    }
+                },
+                "person_extension_ladder_holding_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "extension_ladder",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "reverse_keypoints",
+                        "keypoint": [9, 10]
+                    }
+                },
+                "person_step_ladder_size_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "step_ladder",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "reverse_bbox_size_relation",
+                        "keypoint": []
+                    }
+                },
+                "person_extension_ladder_size_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "extension_ladder",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "reverse_bbox_size_relation",
+                        "keypoint": []
+                    }
+                },
+                "crane_attachment_relation": {
+                    "relation_type": "children",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "crane",
+                    "children_model_branch": "background",
+                    "children_model_name": "vehicle_attachment",
+                    "children_specific_label": "outrigger",
+                    "position_identifier": {
+                        "position_type": "bbox_overlap",
+                        "keypoint": []
+                    }
+                },
+                "excavator_bucket_hook_attachment_relation": {
+                    "relation_type": "children",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "excavator",
+                    "children_model_branch": "background",
+                    "children_model_name": "bucket_attachment",
+                    "children_specific_label": "bucket_hook",
+                    "position_identifier": {
+                        "position_type": "bbox_overlap_bucket",
+                        "keypoint": []
+                    }
+                },
+                "excavator_belt_attachment_relation": {
+                    "relation_type": "children",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "excavator",
+                    "children_model_branch": "background",
+                    "children_model_name": "bucket_attachment",
+                    "children_specific_label": "belt",
+                    "position_identifier": {
+                        "position_type": "bbox_overlap_bucket",
+                        "keypoint": []
+                    }
+                },
+                "liftcar_danger_area_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "liftcar",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "danger_area_keypoints",
+                        "region_type": "ellipse_ratio",
+                        "ratio_a": 1.5,
+                        "ratio_b": 0.3,
+                        "ellipse_a": 350,
+                        "ellipse_b": 75,
+                        "keypoint": [15, 16]
+                    }
+                },
+                "liftcar_scissor_danger_area_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "liftcar_scissor",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "danger_area_keypoints",
+                        "region_type": "ellipse_ratio",
+                        "ratio_a": 1.5,
+                        "ratio_b": 0.3,
+                        "ellipse_a": 500,
+                        "ellipse_b": 500,
+                        "keypoint": [15,16]
+                    }
+                },
+                "crane_danger_area_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "crane",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "danger_area_keypoints",
+                        "region_type": "ellipse_ratio",
+                        "ratio_a": 1.5,
+                        "ratio_b": 0.3,
+                        "ellipse_a": 350,
+                        "ellipse_b": 75,
+                        "keypoint": [15, 16]
+                    }
+                },
+                "excavator_danger_area_relation": {
+                    "relation_type": "side",
+                    "self_model_branch": "background",
+                    "self_model_name": "background",
+                    "self_specific_label": "excavator",
+                    "side_model_branch": "person_equipment",
+                    "side_model_name": "person",
+                    "side_specific_label": "person",
+                    "position_identifier": {
+                        "position_type": "danger_area_keypoints",
+                        "region_type": "ellipse_ratio",
+                        "ellipse_a": 1000,
+                        "ellipse_b": 150,
+                        "ratio_a": 1.5,
+                        "ratio_b": 0.5,
+                        "keypoint": [15, 16]
+                    }
+                }
+            },
+            "thresholds": {
+                "overlap": 0.3,
+                "near": 50,
+                "holding": 0.5,
+                "attached": 0.7,
+                "height_ratio": 1.2
+            }
+        }
+    }
+}

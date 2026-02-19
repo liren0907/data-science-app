@@ -1,0 +1,17 @@
+{
+    "event_config": {
+        "object_event_config": [
+            {
+                "state_id": "person_equipment_A001",
+                "detection_window_config": {
+                    "mode": "frame",
+                    "frame_length": 10,
+                    "time_duration": 20,
+                    "warning_cooldown_time": 500,
+                    "max_time_window_length": 100,
+                    "warning_ratio_threshold": 0.3
+                }
+            }
+        ]
+    }
+}

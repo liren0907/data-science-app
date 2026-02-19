@@ -1,0 +1,241 @@
+{
+  "models": [
+    {
+      "id": "primary_general",
+      "name": "General Object Detector",
+      "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+      "input_source": {
+        "type": "full_frame"
+      },
+      "model_config": {
+        "confidence_threshold": 0.6,
+        "nms_threshold": 0.5,
+        "input_size": {
+          "width": 640,
+          "height": 640
+        },
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      "output_config": {
+        "target_classes": ["person", "car", "bicycle", "motorcycle", "bus", "truck"],
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "{class}: {confidence:.2f}"
+      },
+      "enabled": true,
+      "priority": 1
+    },
+    {
+      "id": "person_classifier",
+      "name": "Person Attribute Classifier",
+      "model_path": "model_weight/person_bicycle_model/model.xml",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "primary_general",
+        "crop_config": {
+          "padding_ratio": 0.15,
+          "min_size": 64,
+          "max_size": 224,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.7
+        },
+        "class_filter": ["person"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.75,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 224,
+          "height": 224
+        },
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        }
+      },
+      "output_config": {
+        "draw_boxes": false,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "Person: {class} ({confidence:.2f})"
+      },
+      "enabled": true,
+      "priority": 1
+    },
+    {
+      "id": "vehicle_classifier",
+      "name": "Vehicle Type Classifier",
+      "model_path": "model_weight/vehicle_model/model.xml",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "primary_general",
+        "crop_config": {
+          "padding_ratio": 0.1,
+          "min_size": 64,
+          "max_size": 256,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.65
+        },
+        "class_filter": ["car", "motorcycle", "bus", "truck"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.8,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 224,
+          "height": 224
+        },
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      "output_config": {
+        "draw_boxes": false,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "Vehicle: {class} ({confidence:.2f})"
+      },
+      "enabled": true,
+      "priority": 1
+    },
+    {
+      "id": "face_detector",
+      "name": "Face Detection in Person Crops",
+      "model_path": "model_weight/face_detection_model/model.xml",
+      "input_source": {
+        "type": "model_regions",
+        "source_model_id": "person_classifier",
+        "region_selector": {
+          "type": "upper_body",
+          "ratio": 0.4
+        }
+      },
+      "model_config": {
+        "confidence_threshold": 0.7,
+        "nms_threshold": 0.3,
+        "input_size": {
+          "width": 160,
+          "height": 160
+        },
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 0
+        }
+      },
+      "output_config": {
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": false,
+        "label_format": "Face"
+      },
+      "enabled": true,
+      "priority": 2
+    },
+    {
+      "id": "bicycle_classifier",
+      "name": "Bicycle Type Classifier",
+      "model_path": "model_weight/bicycle_model/model.xml",
+      "input_source": {
+        "type": "model_detections",
+        "source_model_id": "primary_general",
+        "crop_config": {
+          "padding_ratio": 0.2,
+          "min_size": 48,
+          "max_size": 200,
+          "resize_method": "letterbox",
+          "quality_threshold": 0.6
+        },
+        "class_filter": ["bicycle"]
+      },
+      "model_config": {
+        "confidence_threshold": 0.7,
+        "nms_threshold": 0.4,
+        "input_size": {
+          "width": 160,
+          "height": 160
+        },
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 255
+        }
+      },
+      "output_config": {
+        "draw_boxes": false,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "Bicycle: {class} ({confidence:.2f})"
+      },
+      "enabled": true,
+      "priority": 2
+    },
+    {
+      "id": "safety_analyzer",
+      "name": "Safety Equipment Analyzer",
+      "model_path": "model_weight/safety_model/model.xml",
+      "input_source": {
+        "type": "custom_input",
+        "preprocessing_steps": [
+          {
+            "type": "resize",
+            "width": 320,
+            "height": 320
+          },
+          {
+            "type": "normalize",
+            "mean": [0.485, 0.456, 0.406],
+            "std": [0.229, 0.224, 0.225]
+          }
+        ]
+      },
+      "model_config": {
+        "confidence_threshold": 0.6,
+        "nms_threshold": 0.5,
+        "input_size": {
+          "width": 320,
+          "height": 320
+        },
+        "color": {
+          "r": 255,
+          "g": 165,
+          "b": 0
+        }
+      },
+      "output_config": {
+        "target_classes": ["helmet", "vest", "gloves"],
+        "draw_boxes": true,
+        "draw_labels": true,
+        "draw_confidence": true,
+        "label_format": "Safety: {class} ({confidence:.2f})"
+      },
+      "enabled": false,
+      "priority": 3
+    }
+  ],
+  "processing_config": {
+    "max_parallel_models_per_stage": 4,
+    "enable_pipeline_optimization": true,
+    "memory_pool_size": "2GB",
+    "enable_result_caching": true,
+    "max_cache_size": 500,
+    "timeout_ms": 5000
+  },
+  "input_path": "data/test_video.mp4",
+  "output_path": "output/unified_result.mp4",
+  "visualization_config": {
+    "show_pipeline_info": true,
+    "show_performance_stats": true,
+    "color_scheme": "default",
+    "font_scale": 0.6,
+    "line_thickness": 2
+  }
+} 

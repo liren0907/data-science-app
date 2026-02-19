@@ -1,0 +1,81 @@
+[package]
+name = "data-science-app-backend"
+version = "0.1.0"
+description = "Data Science App Backend"
+authors = ["you"]
+edition = "2024"
+default-run = "data-science-app"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-beta.18", features = [] }
+
+[lib]
+name = "data_science_app_core"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rfd = "0.15.0"
+anyhow = "1.0"
+csv = "1.3.0"
+tempfile = "3.13.0"
+chrono = "0.4.39"
+lazy_static = "1.5.0"
+nix = { version = "0.27.1", features = ["signal"] }
+once_cell = "1.19.0"
+tokio = { version = "1", features = ["full"] }
+futures-util = "0.3"
+base64 = "0.22"
+regex = "1.10"
+tauri-plugin-localhost = { version = "2.0.0-beta.5", optional = true }
+# opencv = { workspace = true }
+surrealdb = { workspace = true }
+
+
+
+# Workspace dependencies (local crates)
+database_surrealdb = { package = "database-surrealdb", path = "crates/database-surrealdb" }
+data_science = { package = "data-science", path = "crates/data-science" }
+
+# Workspace dependencies (from crates.io)
+tauri = { workspace = true, optional = true }
+tauri-plugin-shell = { workspace = true }
+tauri-plugin-dialog = { workspace = true }
+tauri-plugin-fs = { workspace = true }
+log = { workspace = true }
+
+
+
+[workspace]
+members = [
+    "crates/database-surrealdb",
+    "crates/data-science",
+]
+resolver = "2"
+
+[workspace.dependencies]
+tauri = { version = "2.0.0-beta", features = ["protocol-asset"] }
+tauri-plugin-shell = "2.0.0-beta"
+tauri-plugin-dialog = "2.0.0-beta"
+tauri-plugin-fs = "2.0.0-beta"
+# opencv = "0.94.4"
+opencv = { version = "0.94.4", features = ["highgui", "videoio", "imgproc", "imgcodecs"] }
+# Use surrealkv feature for pure Rust embedded KV store
+surrealdb = { version = "2.4.0", features = ["kv-surrealkv"] }
+chrono = { version = "0.4", features = ["serde"] }
+log = "0.4"
+
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+default = ["tauri-plugin-localhost"]
+
+
+
+
+[[bin]]
+name = "data-science-app"
+path = "src/main.rs"

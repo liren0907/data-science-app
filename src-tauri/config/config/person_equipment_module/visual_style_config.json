@@ -1,0 +1,56 @@
+{
+    "colors": {
+        "compliant": [0, 255, 0],
+        "non_compliant": [0, 0, 255],
+        "text_bg": {
+            "normal": [0, 255, 0, 1],
+            "warning": [0, 0, 255, 1],
+            "info": [0, 255, 0, 1]
+        },
+        "text": {
+            "normal": [0, 0, 0],
+            "warning": [0, 0, 0],
+            "info": [0, 0, 0]
+        },
+        "equipment": {
+            "safety_helmet": [0, 255, 0],
+            "reflective_vest": [0, 255, 0],
+            "body_harness": [0, 255, 0]
+        },
+        "summary_bg": [0, 255, 0, 0.7],
+        "scene_overlay": [255, 0, 0],
+        "scene_overlay_warning": [0, 0, 255],
+        "danger_zone": {
+            "fill": [0, 165, 255],
+            "border": [0, 165, 255]
+        }
+    },
+    "text_styles": {
+        "font": "FONT_HERSHEY_SIMPLEX",
+        "default": {
+            "scale": 0.5,
+            "thickness": 1,
+            "padding": 7
+        },
+        "scene_label": {
+            "scale": 0.5,
+            "thickness": 1
+        },
+        "equipment_label": {
+            "scale": 0.4,
+            "thickness": 1
+        }
+    },
+    "drawing_params": {
+        "corner_radius": 3,
+        "warning_duration_time": 2.0,
+        "overlay_opacity": 0.15,
+        "danger_area_annotation": true,
+        "danger_zone": {
+            "width_multiplier": 1.0,
+            "height_multiplier": 0.2,
+            "border_thickness": 10,
+            "fill_opacity": 0.5
+        }
+    }
+}

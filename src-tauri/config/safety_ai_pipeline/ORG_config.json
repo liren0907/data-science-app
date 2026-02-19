@@ -1,0 +1,84 @@
+{
+    "safety_ai_config": {
+        "object_identifier": {
+            "object_occurence": [
+                "person",
+                "safety_helmet"
+            ]
+        },
+        "size_identifier": {
+            "person": {
+                "bbox_width": 50,
+                "bbox_height": 150,
+                "filter_dimension": "both"
+            }
+        },
+        "keypoint_guard": {
+            "parameters": {
+                "confidence_threshold": 0.5,
+                "iou_threshold": 0.5
+            },
+            "person_equipment_children_relations": {
+                "equipment_names": [
+                    "safety_helmet"
+                ]
+            },
+            "equipment_config": {
+                "safety_helmet": {
+                    "mode": "and",
+                    "key_points": [
+                        0
+                    ],
+                    "bbox_adjustment": {
+                        "adjustment_type": "expand_with_bounds",
+                        "ratio": {
+                            "width": 0.5,
+                            "height": 0.5
+                        }
+                    }
+                },
+                "reflective_vest": {
+                    "mode": "or",
+                    "key_points": [
+                        5,
+                        6
+                    ],
+                    "bbox_adjustment": {
+                        "adjustment_type": "expand_with_bounds",
+                        "ratio": {
+                            "width": 0.5,
+                            "height": 0.5
+                        }
+                    }
+                },
+                "body_harness": {
+                    "mode": "or",
+                    "key_points": [
+                        5,
+                        6
+                    ],
+                    "bbox_adjustment": {
+                        "adjustment_type": "expand",
+                        "ratio": {
+                            "width": 0.3,
+                            "height": 0.3
+                        }
+                    }
+                }
+            }
+        },
+        "dispatcher": {
+            "position_guard": {
+                "person_equipment_children_relation": {
+                    "relation_type": "child",
+                    "self_specific_label": "person",
+                    "child_specific_label": "safety_helmet",
+                    "position_identifier": {
+                        "position_type": "bbox",
+                        "keypoint": []
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "person_detected",
+      "required": true,
+      "label": "畫面中出現一個人"
+    },
+    {
+      "id": "helmet_in_position",
+      "required": true,
+      "label": "安全帽在對的位置上"
+    },
+    {
+      "id": "vest_in_position",
+      "required": true,
+      "label": "反光背心在對的位置上"
+    },
+    {
+      "id": "holding_helmet",
+      "required": true,
+      "label": "左手或右手或雙手拿著安全帽"
+    },
+    {
+      "id": "hands_over_head",
+      "required": true,
+      "label": "雙手舉過頭頂"
+    }
+  ],
+  "edges": [
+    {
+      "source": "person_detected",
+      "target": "helmet_in_position"
+    },
+    {
+      "source": "person_detected",
+      "target": "vest_in_position"
+    },
+    {
+      "source": "person_detected",
+      "target": "holding_helmet"
+    },
+    {
+      "source": "helmet_in_position",
+      "target": "holding_helmet"
+    },
+    {
+      "source": "vest_in_position",
+      "target": "holding_helmet"
+    },
+    {
+      "source": "holding_helmet",
+      "target": "hands_over_head"
+    }
+  ]
+}
+

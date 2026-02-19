@@ -1,0 +1,64 @@
+# General
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+**/target/
+**/.git/
+
+# Database 
+src-tauri/*.db
+*.db
+
+# Data and datasets
+data/
+datasets/
+src-tauri/data/
+src-tauri/datasets/
+
+
+# Model weights
+model_weight/
+model_weights/
+src-tauri/model_weight/
+src-tauri/model_weights/
+
+# Logs, outputs, and results
+output/
+outputs/
+output_*
+result/
+results/
+result_*
+src-tauri/output/
+src-tauri/outputs/
+src-tauri/output_*
+src-tauri/result/
+src-tauri/results/
+src-tauri/result_*
+
+# Tauri backend
+src-tauri/target/
+
+# Docs for the dev, plan, project
+docs/plan/
+docs/dev/
+docs/project/
+
+
+# Utilities
+backup/
+deprecated/
+reference/
+references/
+
+# Database
+*.db
+

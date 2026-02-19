@@ -1,0 +1,51 @@
+{
+    "models": [
+        {
+            "id": "main_detector",
+            "name": "Primary Object Detector",
+            "model_path": "model_weight/yolov8s_openvino_model/yolov8s.xml",
+            "input_source": {
+                "type": "full_frame"
+            },
+            "model_config": {
+                "confidence_threshold": 0.6,
+                "nms_threshold": 0.5,
+                "input_size": {
+                    "width": 640,
+                    "height": 640
+                },
+                "color": {
+                    "r": 0,
+                    "g": 255,
+                    "b": 0
+                }
+            },
+            "output_config": {
+                "target_classes": null,
+                "draw_boxes": true,
+                "draw_labels": true,
+                "draw_confidence": true,
+                "label_format": "{class}|{confidence:.2f}"
+            },
+            "enabled": true,
+            "priority": 1
+        }
+    ],
+    "processing_config": {
+        "max_parallel_models_per_stage": 1,
+        "enable_pipeline_optimization": true,
+        "memory_pool_size": "1GB",
+        "enable_result_caching": false,
+        "max_cache_size": 100,
+        "timeout_ms": 5000
+    },
+    "input_path": "data/test_short.mp4",
+    "output_path": "output/simple_result.mp4",
+    "visualization_config": {
+        "show_pipeline_info": true,
+        "show_performance_stats": true,
+        "color_scheme": "default",
+        "font_scale": 0.6,
+        "line_thickness": 2
+    }
+}

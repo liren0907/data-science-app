@@ -1,0 +1,24 @@
+{
+    "safety_ai_config": {
+        "object_state_config": [
+            {
+                "object_name": "person",
+                "self_relation_state_config": [
+                    {
+                        "role": "general",
+                        "watcher_type": "person_equipment",
+                        "state_id": "person_equipment_A001",
+                        "self_relation_attachment": null,
+                        "side_relation_attachment": null,
+                        "children_relation_attachment": {
+                            "required_object_name": [
+                                "safety_helmet"
+                            ]
+                        }
+                    }
+                ],
+                "children_relation_state_config": [],
+                "side_relation_state_config": []
+            }
+        ]
+    }
